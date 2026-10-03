@@ -14,4 +14,87 @@ class Customers extends BaseController
 
         return view('customers', $data);
     }
+
+    public function new(): string
+    {
+        return view('customers_new');
+    }
+
+    public function create()
+    {
+        $rules = [
+            'full_name' => 'required|max_length[100]',
+            'email'     => 'required|valid_email|max_length[100]',
+        ];
+
+        $errors = [
+            'full_name' => [
+                'required' => 'Full Name is required.',
+            ],
+            'email' => [
+                'required' => 'Email is required.',
+                'valid_email' => 'Please enter a valid email address.',
+            ],
+        ];
+
+        if (!$this->validate($rules, $errors)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $customerModel = new CustomerModel();
+
+        $customerModel->insert([
+            'full_name' => $this->request->getPost('full_name'),
+            'email'     => $this->request->getPost('email'),
+            'phone'     => $this->request->getPost('phone'),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()->to('/customers');
+    }
+
+    public function edit($id): string
+    {
+        $customerModel = new CustomerModel();
+
+        $data['customer'] = $customerModel->find($id);
+
+        return view('customers_edit', $data);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'full_name' => 'required|max_length[100]',
+            'email'     => 'required|valid_email|max_length[100]',
+        ];
+
+        $errors = [
+            'full_name' => [
+                'required' => 'Full Name is required.',
+            ],
+            'email' => [
+                'required' => 'Email is required.',
+                'valid_email' => 'Please enter a valid email address.',
+            ],
+        ];
+
+        if (!$this->validate($rules, $errors)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $customerModel = new CustomerModel();
+
+        $customerModel->update($id, [
+            'full_name' => $this->request->getPost('full_name'),
+            'email'     => $this->request->getPost('email'),
+            'phone'     => $this->request->getPost('phone'),
+        ]);
+
+        return redirect()->to('/customers');
+    }
 }

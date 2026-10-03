@@ -13,16 +13,38 @@
     <table border="1" cellpadding="10">
         <thead>
             <tr>
+                <th>Avatar</th>
                 <th>Username</th>
                 <th>Full Name</th>
+                <th>Action</th>
             </tr>
         </thead>
 
         <tbody>
             <?php foreach ($users as $user): ?>
                 <tr>
+
+                    <td>
+                        <?php if (!empty($user['avatar'])): ?>
+                            <img
+                                src="<?= base_url('uploads/avatars/' . $user['avatar']) ?>"
+                                width="80"
+                                height="80"
+                                alt="User Avatar"
+                            >
+                        <?php else: ?>
+                            No Avatar
+                        <?php endif; ?>
+                    </td>
+
                     <td><?= esc($user['username']) ?></td>
+
                     <td><?= esc($user['full_name']) ?></td>
+
+                    <td>
+                        <a href="/users/edit/<?= $user['id'] ?>">Edit</a>
+                    </td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>
