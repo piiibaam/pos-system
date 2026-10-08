@@ -25,6 +25,7 @@ class Users extends BaseController
         $rules = [
             'username'  => 'required|max_length[50]|is_unique[users.username]',
             'full_name' => 'required|max_length[100]',
+            'password'  => 'required|min_length[6]',
         ];
 
         $errors = [
@@ -34,6 +35,10 @@ class Users extends BaseController
             ],
             'full_name' => [
                 'required' => 'Full Name is required.',
+            ],
+            'password' => [
+                'required' => 'Password is required.',
+                'min_length' => 'Password must be at least 6 characters.',
             ],
         ];
 
@@ -45,6 +50,10 @@ class Users extends BaseController
 
         $userModel->insert([
             'username'  => $this->request->getPost('username'),
+            'password'  => password_hash(
+                $this->request->getPost('password'),
+                PASSWORD_DEFAULT
+            ),
             'full_name' => $this->request->getPost('full_name'),
             'created_at' => date('Y-m-d H:i:s'),
         ]);

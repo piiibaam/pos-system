@@ -10,6 +10,10 @@
 
     <h1>User Accounts</h1>
 
+    <p>
+        <a href="<?base_url('/logout') ?>"> Logout </a>
+    </p>
+
     <table border="1" cellpadding="10">
         <thead>
             <tr>
